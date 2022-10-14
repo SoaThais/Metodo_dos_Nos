@@ -8,7 +8,6 @@
 -> Carregamento:
 
     ID Fx Fy
-    
     ...
 
 ## Entrada de Dados
@@ -17,7 +16,6 @@
     ID COORD X COORD Y
 
     1    0        0
-
     ...
 
 -> Lista de Barras: 
@@ -25,7 +23,6 @@
     ID NÓ INICIAL NÓ FINAL
 
     1       1       2
-
     ...
 
 -> Condições de Contorno (Reações de Apoio):
