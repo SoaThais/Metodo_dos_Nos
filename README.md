@@ -1,4 +1,4 @@
-# Metodo_dos_Nos
+# Método dos Nós
 
 ## Parametrização:
 -> Vão
