@@ -28,6 +28,9 @@ class No {
         float getCoordX();
         float getCoordY();
         void insereBarra(int id);
+        void insereCarregamento(float carregamentoX, float carregamentoY);
+        list <float> getCarregamentoX();
+        list <float> getCarregamentoY();
         list <int> getBarras();
         void imprime();
 };

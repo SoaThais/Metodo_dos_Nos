@@ -22,10 +22,12 @@ class Trelica {
         // list<Barra*> BarraTrelica;
         void insereNos();
         void insereBarras();
+        void escreveArquivoDot();
     public:
         Trelica(float vao, int numModulos);
         void imprimeNos();
         void imprime();
+        void adicionaCarregamento(int id, float carregamentoX, float carregamentoY);
 };
 
 #endif

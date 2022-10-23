@@ -9,8 +9,6 @@ No::No (int id, float coordX, float coordY){
     this->coordX = coordX;
     this->coordY = coordY;
     this->grau = 0;
-    // this->primeiraBarra = NULL;
-    // this->proxNo = NULL;
     this->apoioX = -1;
     this->apoioY = -1;
 }
@@ -21,6 +19,19 @@ void No::insereBarra(int id){
 
 list <int> No::getBarras(){
     return barras;
+}
+
+void No::insereCarregamento(float carregamentoX, float carregamentoY){
+    this->carregamentoX.push_back(carregamentoX);
+    this->carregamentoY.push_back(carregamentoY);
+}
+
+list <float> No::getCarregamentoX(){
+    return carregamentoX;
+}
+
+list <float> No::getCarregamentoY(){
+    return carregamentoY;
 }
 
 void No::imprime(){

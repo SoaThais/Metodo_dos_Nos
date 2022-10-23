@@ -2,6 +2,7 @@
 #include <cmath>
 #include <unordered_map>
 #include <list>
+#include <fstream>
 #include "No.h"
 #include "Barra.h"
 #include "Trelica.h"
@@ -30,6 +31,7 @@ Trelica::Trelica (float vao, int numModulos){
     this->numNos = this->numModulos * 3 - this->numModulos + 1;
     insereNos();
     insereBarras();
+    escreveArquivoDot();
 }
 
 void Trelica::insereNos(){
@@ -104,9 +106,24 @@ void Trelica::imprime() {
     for (auto i = this->nos.begin(); i != nos.end(); i++){
         int idNo = *i;
         No *no = mapaNos.at(idNo);
-        cout << "------------------------No-----------------------" << endl;
+        cout << "------------------------ No " << no->getId() << " -----------------------" << endl;
         cout << "Id: " << no->getId() << endl << "Coordenada X: " << no->getCoordX() << endl << "Coordenada Y: " << no->getCoordY() << endl;
-        cout << "Barras: " << endl;
+        
+        cout << endl << "Carregamentos: " << endl;
+        cout << "Em x: " << endl;
+        list <float> aux1 = no->getCarregamentoX();
+        for (auto j = aux1.begin(); j != aux1.end(); j++){
+            int fx = *j;
+            cout << fx << endl;
+        }
+        cout << "Em y: " << endl;
+        aux1 = no->getCarregamentoY();
+        for (auto j = aux1.begin(); j != aux1.end(); j++){
+            int fy = *j;
+            cout << fy << endl;
+        }
+        
+        cout << endl << "Barras: " << endl;
         list <int> aux = no->getBarras();
         for (auto j = aux.begin(); j != aux.end(); j++){
             int id = *j;
@@ -115,4 +132,41 @@ void Trelica::imprime() {
         }
         cout << endl;
     }
+}
+
+void Trelica::adicionaCarregamento(int id, float carregamentoX, float carregamentoY) {
+    try{
+        mapaNos.at(id)->insereCarregamento(carregamentoX, carregamentoY);
+    } 
+    catch (const out_of_range &oor){
+        cout << "Erro: Id Invalido" << endl;
+        return;
+    }
+}
+
+void Trelica::escreveArquivoDot()
+{
+    ofstream saida;
+    saida.open("Trelica.dot", ios::out);
+
+    saida << "graph Trelica {" << endl;
+
+    bool adicionado[this->numBarras];
+
+    for (auto i = this->nos.begin(); i != this->nos.end(); i++) {
+
+        No *no = mapaNos.at(*i);
+        list <int> aux = no->getBarras();
+
+        for (auto j = aux.begin(); j != aux.end(); j++) {
+            int id = *j;
+            Barra *b = mapaBarras.at(id);
+            if (adicionado[id] == false){
+                saida << b->getNoInicial() << " -- " << b->getNoFinal();
+                adicionado[id] = true;
+                saida << endl;
+            }
+        }
+    }
+    saida << "}" << endl;
 }
