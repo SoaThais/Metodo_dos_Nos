@@ -15,11 +15,9 @@ class Trelica {
         float tamBarras;
         int numBarras;
         int numNos;
-        // No *primeiroNo;
         unordered_map <int, No*> mapaNos;
         unordered_map <int, Barra*> mapaBarras;
         list <int> nos;
-        // list<Barra*> BarraTrelica;
         void insereNos();
         void insereBarras();
         void escreveArquivoDot();

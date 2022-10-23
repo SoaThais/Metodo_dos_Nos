@@ -26,7 +26,6 @@ Trelica::Trelica (float vao, int numModulos){
             exit(0);
         }
     }
-    // this->primeiroNo = NULL;
     this->numBarras = this->numModulos * 3 + this->numModulos - 1;
     this->numNos = this->numModulos * 3 - this->numModulos + 1;
     insereNos();

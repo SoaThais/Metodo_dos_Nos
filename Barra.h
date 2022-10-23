@@ -6,7 +6,6 @@ class Barra {
         int id;
         int noInicial;
         int noFinal;
-        // Barra *proxAresta;
     public:
         Barra (int id, int noInicial, int noFinal);
         int getId();

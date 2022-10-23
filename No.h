@@ -16,8 +16,6 @@ class No {
         list <float> carregamentoX;
         list <float> carregamentoY;
         list <int> barras;
-        // Barra *primeiraBarra;
-        // No *proxNo;
     public:
         No (int id, float coordX, float coordY);
         void setApoioX(float apoioX);
