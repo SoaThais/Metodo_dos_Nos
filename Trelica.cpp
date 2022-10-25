@@ -9,19 +9,25 @@
 
 using namespace std;
 
-Trelica::Trelica (float vao, int numModulos){
+Trelica::Trelica(float vao, int numModulos)
+{
     this->vao = vao;
     this->numModulos = numModulos;
-    try {
-        if (this->numModulos == 0){
+    try
+    {
+        if (this->numModulos == 0)
+        {
             throw 1;
         }
-        else {
+        else
+        {
             this->tamBarras = this->vao / this->numModulos;
         }
     }
-    catch (int erro){
-        if (erro == 1){
+    catch (int erro)
+    {
+        if (erro == 1)
+        {
             cout << "Erro: Divisão por zero" << endl;
             exit(0);
         }
@@ -33,18 +39,22 @@ Trelica::Trelica (float vao, int numModulos){
     escreveArquivoDot();
 }
 
-void Trelica::insereNos(){
+void Trelica::insereNos()
+{
     float coordX = 0;
     float coordY = 0;
     float aux = 0;
-    for (int i = 0; i < this->numNos; i++){
-        No *no = new No (i, coordX, coordY);
+    for (int i = 0; i < this->numNos; i++)
+    {
+        No *no = new No(i, coordX, coordY);
 
-        if (i == 0){
+        if (i == 0)
+        {
             no->setApoioX(0);
             no->setApoioY(0);
         }
-        else if (i == this->numNos - 1){
+        else if (i == this->numNos - 1)
+        {
             no->setApoioY(0);
         }
 
@@ -53,42 +63,53 @@ void Trelica::insereNos(){
 
         aux += 0.5;
         coordX = aux * this->tamBarras;
-        if (coordY == 0){
+        if (coordY == 0)
+        {
             coordY = this->tamBarras * sqrt(3) / 2;
         }
-        else {
+        else
+        {
             coordY = 0;
         }
     }
 }
 
-void Trelica::imprimeNos(){
-    for (auto i = this->nos.begin(); i != nos.end(); i++){
+void Trelica::imprimeNos()
+{
+    for (auto i = this->nos.begin(); i != nos.end(); i++)
+    {
         int id = *i;
         No *no = mapaNos.at(id);
         cout << "Id: " << no->getId() << " Coordenada X: " << no->getCoordX() << " Coordenada Y: " << no->getCoordY() << endl;
     }
 }
 
-void Trelica::insereBarras(){
+void Trelica::insereBarras()
+{
     int id = 0;
-    for (int i = 0; i < this->numNos; i++){
-        for (int j = i + 1; j < this->numNos; j++){
+    for (int i = 0; i < this->numNos; i++)
+    {
+        for (int j = i + 1; j < this->numNos; j++)
+        {
             No *no = mapaNos.at(i);
             bool insere = false;
-            if (i == 0) {
+            if (i == 0)
+            {
                 if (no->getGrau() < 2)
                     insere = true;
             }
-            else if (i == 1 || i == this->numNos - 2) {
+            else if (i == 1 || i == this->numNos - 2)
+            {
                 if (no->getGrau() < 3)
                     insere = true;
             }
-            else if (i != this->numNos - 1){
+            else if (i != this->numNos - 1)
+            {
                 if (no->getGrau() < 4)
                     insere = true;
             }
-            if (insere){
+            if (insere)
+            {
                 Barra *barra = new Barra(id, i, j);
                 mapaNos.at(i)->setGrau(mapaNos.at(i)->getGrau() + 1);
                 mapaNos.at(j)->setGrau(mapaNos.at(j)->getGrau() + 1);
@@ -101,46 +122,133 @@ void Trelica::insereBarras(){
     }
 }
 
-void Trelica::imprime() {
-    for (auto i = this->nos.begin(); i != nos.end(); i++){
+void Trelica::imprime()
+{
+    for (auto i = this->nos.begin(); i != nos.end(); i++)
+    {
         int idNo = *i;
         No *no = mapaNos.at(idNo);
         cout << "------------------------ No " << no->getId() << " -----------------------" << endl;
-        cout << "Id: " << no->getId() << endl << "Coordenada X: " << no->getCoordX() << endl << "Coordenada Y: " << no->getCoordY() << endl;
-        
-        cout << endl << "Carregamentos: " << endl;
+        cout << "Id: " << no->getId() << endl
+             << "Coordenada X: " << no->getCoordX() << endl
+             << "Coordenada Y: " << no->getCoordY() << endl;
+
+        cout << endl
+             << "Carregamentos: " << endl;
         cout << "Em x: " << endl;
-        list <float> aux1 = no->getCarregamentoX();
-        for (auto j = aux1.begin(); j != aux1.end(); j++){
+        list<float> aux1 = no->getCarregamentoX();
+        for (auto j = aux1.begin(); j != aux1.end(); j++)
+        {
             int fx = *j;
             cout << fx << endl;
         }
         cout << "Em y: " << endl;
         aux1 = no->getCarregamentoY();
-        for (auto j = aux1.begin(); j != aux1.end(); j++){
+        for (auto j = aux1.begin(); j != aux1.end(); j++)
+        {
             int fy = *j;
             cout << fy << endl;
         }
-        
-        cout << endl << "Barras: " << endl;
-        list <int> aux = no->getBarras();
-        for (auto j = aux.begin(); j != aux.end(); j++){
+
+        cout << endl
+             << "Barras: " << endl;
+        list<int> aux = no->getBarras();
+        for (auto j = aux.begin(); j != aux.end(); j++)
+        {
             int id = *j;
             Barra *b = mapaBarras.at(id);
-            cout << "Id: " << b->getId() << endl << "Id Inicial: " << b->getNoInicial() << endl << "Id Final: " << b->getNoFinal() << endl;
+            cout << "Id: " << b->getId() << endl
+                 << "Id Inicial: " << b->getNoInicial() << endl
+                 << "Id Final: " << b->getNoFinal() << endl;
         }
         cout << endl;
     }
 }
 
-void Trelica::adicionaCarregamento(int id, float carregamentoX, float carregamentoY) {
-    try{
-        mapaNos.at(id)->insereCarregamento(carregamentoX, carregamentoY);
-    } 
-    catch (const out_of_range &oor){
+void Trelica::adicionaCarregamento(int id, float fx, float fy)
+{
+    try
+    {
+        mapaNos.at(id)->insereCarregamento(fx, fy);
+    }
+    catch (const out_of_range &oor)
+    {
         cout << "Erro: Id Invalido" << endl;
         return;
     }
+}
+
+void Trelica::adicionaMomento(float mz)
+{
+    this->momentos.push_back(mz);
+}
+
+// Fy + gera, em relação ao nó 0, momento no sentido anti-horário +
+// Fy - gera, em relação ao nó 0, momento no sentido horário -
+// Fx + gera, em relação ao nó 0, momento no sentido horário -
+// Fx - gera, em relação ao nó 0, momento no sentido anti-horário +
+// Assim, no cálculo do momento em relação ao nó 0, o sinal de Fy é mantido 
+// e o de Fx é multiplicado por -1
+
+void Trelica::calculaReacoesApoio()
+{
+    int idRx = -1, idRy1 = -1, idRy2 = -1;
+    float somatorioFx = 0, somatorioFy = 0, somatorioM = 0;
+    for (int i = 0; i < this->numNos; i++){
+        No *no = this->mapaNos.at(i);
+        if (no->getApoioX() != -1)
+        {
+            idRx = i;
+        }
+        if (no->getApoioY() != -1)
+        {
+            if (idRy1 == -1){
+                idRy1 = i;
+            }
+            else{
+                idRy2 = i;
+            }
+        }
+
+        list <float> aux = no->getCarregamentoX();
+        for (auto j = aux.begin(); j != aux.end(); j++){
+            float fx = *j;
+            somatorioFx += fx;
+            somatorioM += fx * -1 * no->getCoordY();
+        }
+
+        aux = no->getCarregamentoY();
+        for (auto j = aux.begin(); j != aux.end(); j++){
+            float fy = *j;
+            somatorioFy += fy;
+            somatorioM += fy * no->getCoordX();
+        }
+    }
+
+    if (somatorioFx != 0)
+        somatorioFx = somatorioFx * -1;
+
+    mapaNos.at(idRx)->setApoioX(somatorioFx);
+
+    list <float> aux = this->momentos;
+    for (auto j = aux.begin(); j != aux.end(); j++){
+        float mz = *j;
+        somatorioM += mz;
+    }
+
+    if (somatorioM != 0)
+        somatorioM = somatorioM * -1 / mapaNos.at(idRy2)->getCoordX();
+
+    mapaNos.at(idRy2)->setApoioY(somatorioM);
+
+    if (somatorioFy + somatorioM != 0)
+        somatorioFy = (somatorioFy + somatorioM) * -1;
+    
+    mapaNos.at(idRy1)->setApoioY(somatorioFy);
+
+    cout << "Reacoes de Apoio" << endl << "No " << idRx << " (eixo x): " << mapaNos.at(idRx)->getApoioX() << endl;
+    cout << "No " << idRy1 << " (eixo y): " << mapaNos.at(idRy1)->getApoioY() << endl;
+    cout << "No " << idRy2 << " (eixo y): " << mapaNos.at(idRy2)->getApoioY() << endl;
 }
 
 void Trelica::escreveArquivoDot()
@@ -152,15 +260,18 @@ void Trelica::escreveArquivoDot()
 
     bool adicionado[this->numBarras];
 
-    for (auto i = this->nos.begin(); i != this->nos.end(); i++) {
+    for (auto i = this->nos.begin(); i != this->nos.end(); i++)
+    {
 
         No *no = mapaNos.at(*i);
-        list <int> aux = no->getBarras();
+        list<int> aux = no->getBarras();
 
-        for (auto j = aux.begin(); j != aux.end(); j++) {
+        for (auto j = aux.begin(); j != aux.end(); j++)
+        {
             int id = *j;
             Barra *b = mapaBarras.at(id);
-            if (adicionado[id] == false){
+            if (adicionado[id] == false)
+            {
                 saida << b->getNoInicial() << " -- " << b->getNoFinal();
                 adicionado[id] = true;
                 saida << endl;
@@ -168,4 +279,5 @@ void Trelica::escreveArquivoDot()
         }
     }
     saida << "}" << endl;
+    saida.close();
 }

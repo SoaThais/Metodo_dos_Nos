@@ -20,6 +20,8 @@ class No {
         No (int id, float coordX, float coordY);
         void setApoioX(float apoioX);
         void setApoioY(float apoioY);
+        float getApoioX();
+        float getApoioY();
         void setGrau(int grau);
         int getGrau();
         int getId();

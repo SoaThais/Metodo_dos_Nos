@@ -3,21 +3,24 @@
 
 using namespace std;
 
-Barra::Barra (int id, int noInicial, int noFinal){
+Barra::Barra(int id, int noInicial, int noFinal)
+{
     this->id = id;
     this->noInicial = noInicial;
     this->noFinal = noFinal;
-    //this->proxAresta = NULL;
 }
 
-int Barra::getId(){
+int Barra::getId()
+{
     return this->id;
 }
 
-int Barra::getNoInicial(){
+int Barra::getNoInicial()
+{
     return this->noInicial;
 }
 
-int Barra::getNoFinal(){
+int Barra::getNoFinal()
+{
     return this->noFinal;
 }
