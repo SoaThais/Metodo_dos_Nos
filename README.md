@@ -12,12 +12,10 @@ Ao adicionar um carregamento, deve-se utilizar o sinal para indicar o sentido em
 O sinal positivo é utilizado para:
 - Força na mesma direção e sentido do eixo x
 - Força na mesma direção e sentido do eixo y
-- Momento no sentido anti-horário
 
 O sinal negativo é utilizado para:
 - Força na mesma direção, mas sentido oposto ao eixo x
 - Força na mesma direção, mas sentido oposto ao eixo y
-- Momento no sentido horário
 
 ## Exemplo de Uso 
 
