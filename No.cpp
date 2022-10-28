@@ -10,8 +10,8 @@ No::No(int id, float coordX, float coordY)
     this->coordX = coordX;
     this->coordY = coordY;
     this->grau = 0;
-    this->apoioX = -1;
-    this->apoioY = -1;
+    this->apoioX = INT_MAX;
+    this->apoioY = INT_MAX;
 }
 
 void No::insereBarra(int id)
@@ -73,6 +73,11 @@ float No::getApoioY()
 int No::getId()
 {
     return this->id;
+}
+
+void No::setId(int id)
+{
+    this->id = id;
 }
 
 float No::getCoordX()

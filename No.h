@@ -18,6 +18,7 @@ class No {
         list <int> barras;
     public:
         No (int id, float coordX, float coordY);
+        No (){};
         void setApoioX(float apoioX);
         void setApoioY(float apoioY);
         float getApoioX();
@@ -25,6 +26,7 @@ class No {
         void setGrau(int grau);
         int getGrau();
         int getId();
+        void setId(int id);
         float getCoordX();
         float getCoordY();
         void insereBarra(int id);

@@ -5,7 +5,6 @@ using namespace std;
 
 int main()
 {
-
     float vao;
     int numModulos;
 
@@ -27,9 +26,8 @@ int main()
         cout << endl
              << "Menu" << endl
              << "1. Adicionar Forca" << endl;
-        cout << "2. Adicionar Momento" << endl;
-        cout << "3. Aplicar Metodo dos Nos" << endl;
-
+        cout << "2. Aplicar Metodo dos Nos" << endl;
+        cout << "3. Encerrar Programa" << endl;
         int opcao;
         cout << "Opcao: ";
         cin >> opcao;
@@ -51,16 +49,14 @@ int main()
         }
         else if (opcao == 2)
         {
-            cout << endl
-                 << "Momento " << momento << ": ";
-            float mz;
-            cin >> mz;
-            t->adicionaMomento(mz);
-        }
-        else if (opcao == 3)
-        {
+            cout << endl;
+            // t->imprime();
             continua = false;
             t->calculaReacoesApoio();
+            t->calculaEsforcosInternos();
+        }
+        else if (opcao == 3){
+            continua = false;
         }
         else
         {

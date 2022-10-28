@@ -18,17 +18,19 @@ class Trelica {
         unordered_map <int, No*> mapaNos;
         unordered_map <int, Barra*> mapaBarras;
         list <int> nos;
-        list <float> momentos;
         void insereNos();
         void insereBarras();
         void escreveArquivoDot();
+        void troca(No *a, No *b);
+        int particionamento(No nos [], int p, int q);
+        void QuickSort(No nos [], int p, int q);
     public:
         Trelica(float vao, int numModulos);
         void imprimeNos();
         void imprime();
         void adicionaCarregamento(int id, float fx, float fy);
-        void adicionaMomento(float mz);
         void calculaReacoesApoio();
+        void calculaEsforcosInternos();
 };
 
 #endif

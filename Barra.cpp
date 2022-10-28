@@ -8,6 +8,7 @@ Barra::Barra(int id, int noInicial, int noFinal)
     this->id = id;
     this->noInicial = noInicial;
     this->noFinal = noFinal;
+    this->esforcoInterno = INT_MAX;
 }
 
 int Barra::getId()
@@ -23,4 +24,14 @@ int Barra::getNoInicial()
 int Barra::getNoFinal()
 {
     return this->noFinal;
+}
+
+float Barra::getEsforcoInterno()
+{
+    return this->esforcoInterno;
+}
+
+void Barra::setEsforcoInterno(float esforcoInterno)
+{
+    this->esforcoInterno = esforcoInterno;
 }

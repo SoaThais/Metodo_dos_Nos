@@ -178,11 +178,6 @@ void Trelica::adicionaCarregamento(int id, float fx, float fy)
     }
 }
 
-void Trelica::adicionaMomento(float mz)
-{
-    this->momentos.push_back(mz);
-}
-
 // Fy + gera, em relação ao nó 0, momento no sentido anti-horário +
 // Fy - gera, em relação ao nó 0, momento no sentido horário -
 // Fx + gera, em relação ao nó 0, momento no sentido horário -
@@ -196,11 +191,11 @@ void Trelica::calculaReacoesApoio()
     float somatorioFx = 0, somatorioFy = 0, somatorioM = 0;
     for (int i = 0; i < this->numNos; i++){
         No *no = this->mapaNos.at(i);
-        if (no->getApoioX() != -1)
+        if (no->getApoioX() != INT_MAX)
         {
             idRx = i;
         }
-        if (no->getApoioY() != -1)
+        if (no->getApoioY() != INT_MAX)
         {
             if (idRy1 == -1){
                 idRy1 = i;
@@ -230,12 +225,6 @@ void Trelica::calculaReacoesApoio()
 
     mapaNos.at(idRx)->setApoioX(somatorioFx);
 
-    list <float> aux = this->momentos;
-    for (auto j = aux.begin(); j != aux.end(); j++){
-        float mz = *j;
-        somatorioM += mz;
-    }
-
     if (somatorioM != 0)
         somatorioM = somatorioM * -1 / mapaNos.at(idRy2)->getCoordX();
 
@@ -245,10 +234,185 @@ void Trelica::calculaReacoesApoio()
         somatorioFy = (somatorioFy + somatorioM) * -1;
     
     mapaNos.at(idRy1)->setApoioY(somatorioFy);
-
-    cout << "Reacoes de Apoio" << endl << "No " << idRx << " (eixo x): " << mapaNos.at(idRx)->getApoioX() << endl;
+    cout << "------------------------ Reacoes de Apoio -----------------------" << endl;
+    cout << "No " << idRx << " (eixo x): " << mapaNos.at(idRx)->getApoioX() << endl;
     cout << "No " << idRy1 << " (eixo y): " << mapaNos.at(idRy1)->getApoioY() << endl;
-    cout << "No " << idRy2 << " (eixo y): " << mapaNos.at(idRy2)->getApoioY() << endl;
+    cout << "No " << idRy2 << " (eixo y): " << mapaNos.at(idRy2)->getApoioY() << endl << endl;
+}
+
+void Trelica::QuickSort(No nos[], int p, int q)
+{
+    if (p < q)
+    {
+        int j = particionamento(nos, p, q);
+        QuickSort(nos, p, j - 1);
+        QuickSort(nos, j + 1, q);
+    }
+}
+
+int Trelica::particionamento(No nos[], int p, int q)
+{
+    int i = p - 1, j = q;
+    int v = nos[q].getGrau();
+
+    while (1)
+    {
+        while (nos[++i].getGrau() < v);
+        while (v < nos[--j].getGrau())
+        {
+            if (j == p)
+                break;
+        }
+        if (i >= j)
+            break;
+        troca(&nos[i], &nos[j]);
+    }
+
+    troca(&nos[i], &nos[q]);
+
+    return i;
+}
+
+void Trelica::troca(No *a, No *b)
+{
+    No aux = *a;
+    *a = *b;
+    *b = aux;
+}
+
+void Trelica::calculaEsforcosInternos()
+{
+    No *nos = new No[this->numNos];
+    for (int i = 0; i < this->numNos; i++)
+    {
+        nos[i].setId(mapaNos.at(i)->getId());
+        nos[i].setGrau(mapaNos.at(i)->getGrau());
+    }
+
+    QuickSort(nos, 0, this->numNos - 1);
+
+    for (int i = 0; i < this->numNos; i++)
+    {
+        No no = nos[i];
+        list <int> aux = mapaNos.at(no.getId())->getBarras();
+        int id_1, id_2;
+        float unitarioI_1, unitarioJ_1;
+        float unitarioI_2, unitarioJ_2;
+
+        for (auto j = aux.begin(); j != aux.end(); j++)
+        {
+            int idBarra = *j;
+            Barra *b = mapaBarras.at(idBarra);
+            if (b->getEsforcoInterno() == INT_MAX) {
+                No *noFinal = mapaNos.at(b->getNoFinal());
+                No *noInicial = mapaNos.at(b->getNoInicial());
+                float unitarioI, unitarioJ;
+                if (b->getNoInicial() != no.getId()) {
+                    unitarioI = (noInicial->getCoordX() - noFinal->getCoordX());
+                    unitarioJ = (noInicial->getCoordY() - noFinal->getCoordY());       
+                }
+                else {
+                    unitarioI = (noFinal->getCoordX() - noInicial->getCoordX());
+                    unitarioJ = (noFinal->getCoordY() - noInicial->getCoordY());
+                }
+                float raiz = sqrt(pow(unitarioI, 2) + pow(unitarioJ, 2));
+                unitarioI = unitarioI / raiz;    
+                unitarioJ = unitarioJ / raiz;  
+                if (unitarioJ != 0){
+                    unitarioI_1 = unitarioI;
+                    unitarioJ_1 = unitarioJ;
+                    id_1 = idBarra;
+                }
+                else {
+                    unitarioI_2 = unitarioI;
+                    unitarioJ_2 = unitarioJ;
+                    id_2 = idBarra;
+                }
+            }
+        }
+
+        list <float> aux2;
+        if (i < this->numNos - 1){
+            float somaY = 0;
+            aux2 = mapaNos.at(no.getId())->getCarregamentoY();
+            for (auto j = aux2.begin(); j != aux2.end(); j++) {
+                somaY += *j;
+            }
+            if (mapaNos.at(no.getId())->getApoioY() != INT_MAX){
+                somaY += mapaNos.at(no.getId())->getApoioY();
+            }
+            list <int> aux3 = mapaNos.at(no.getId())->getBarras();
+            for (auto j = aux3.begin(); j != aux3.end(); j++)
+            {
+                int idBarra = *j;
+                Barra *b = mapaBarras.at(idBarra);
+                if (b->getEsforcoInterno() != INT_MAX) {
+                    No *noFinal = mapaNos.at(b->getNoFinal());
+                    No *noInicial = mapaNos.at(b->getNoInicial());
+                    float unitarioI, unitarioJ;
+                    if (b->getNoInicial() != no.getId()) {
+                        unitarioI = (noInicial->getCoordX() - noFinal->getCoordX());
+                        unitarioJ = (noInicial->getCoordY() - noFinal->getCoordY());       
+                    }
+                    else {
+                        unitarioI = (noFinal->getCoordX() - noInicial->getCoordX());
+                        unitarioJ = (noFinal->getCoordY() - noInicial->getCoordY());
+                    }
+                    float raiz = sqrt(pow(unitarioI, 2) + pow(unitarioJ, 2));
+                    unitarioI = unitarioI / raiz;    
+                    unitarioJ = unitarioJ / raiz;  
+                    somaY += b->getEsforcoInterno() * unitarioJ;
+                }
+            }
+            float esforco_1 = - somaY / unitarioJ_1;
+            mapaBarras.at(id_1)->setEsforcoInterno(esforco_1);
+        }
+        if (i < this->numNos - 2) {
+            float somaX = 0;
+            aux2 = mapaNos.at(no.getId())->getCarregamentoX();
+            for (auto j = aux2.begin(); j != aux2.end(); j++) {
+                somaX += *j;
+            }
+            if (mapaNos.at(no.getId())->getApoioX() != INT_MAX){
+                somaX += mapaNos.at(no.getId())->getApoioX();
+            }
+            list <int> aux3 = mapaNos.at(no.getId())->getBarras();
+            for (auto j = aux3.begin(); j != aux3.end(); j++)
+            {
+                float unitarioI, unitarioJ;
+                int idBarra = *j;
+                Barra *b = mapaBarras.at(idBarra);
+                if (b->getEsforcoInterno() != INT_MAX) {
+                    No *noFinal = mapaNos.at(b->getNoFinal());
+                    No *noInicial = mapaNos.at(b->getNoInicial());
+                    if (b->getNoInicial() != no.getId()) {
+                        unitarioI = (noInicial->getCoordX() - noFinal->getCoordX());
+                        unitarioJ = (noInicial->getCoordY() - noFinal->getCoordY());       
+                    }
+                    else {
+                        unitarioI = (noFinal->getCoordX() - noInicial->getCoordX());
+                        unitarioJ = (noFinal->getCoordY() - noInicial->getCoordY());
+                    }
+                    float raiz = sqrt(pow(unitarioI, 2) + pow(unitarioJ, 2));
+                    unitarioI = unitarioI / raiz;    
+                    unitarioJ = unitarioJ / raiz;  
+                    somaX += b->getEsforcoInterno() * unitarioI;
+                }
+            }
+            float esforco_2 = - somaX / unitarioI_2;
+            mapaBarras.at(id_2)->setEsforcoInterno(esforco_2);
+        }
+    }
+    
+    for (auto i = mapaBarras.begin(); i != mapaBarras.end(); i++){
+        int id = i->first;
+        Barra *b = i->second;
+        cout << "--------------------------- Barra " << id << " --------------------------" << endl;
+        cout << "Id: " << id << endl;
+        cout << "No Inicial: " << b->getNoInicial() << endl;
+        cout << "No Final: " << b->getNoFinal() << endl;
+        cout << "Esforco: " << b->getEsforcoInterno() << endl << endl;
+    }
 }
 
 void Trelica::escreveArquivoDot()
